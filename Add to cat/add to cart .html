@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details - Fav Speedy</title>
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="custom">
+        <div>
+            <img src="../images/Blue and White Flat Illustrative E-commerce Platform Logo.png" alt="logo">
+        </div>
+        <div class="nav-custom">
+            <div class="custom-nav-img">
+                <img class="close-custom" src="../images/icon-menu.svg" alt="">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html#Home">Home</a></li>
+                    <li><a href="../index.html#Men">Men</a></li>
+                    <li><a href="../index.html#women">Women</a></li>
+                    <li><a href="../index.html#Contact">Contact</a></li>
+                    <li><a href="../index.html#TESTIMONIAL">Testimonial</a></li>
+                    <li><a href="../cart.html" style="position: relative;">
+                        🛒 Cart
+                        <span class="cart-count" style="display: none;">0</span>
+                    </a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="product-detail-container">
+        <div class="product-detail-header">
+            <h1>Product Details</h1>
+            <a href="../index.html">← Back to Shop</a>
+        </div>
+
+        <div class="product-detail-content">
+            <div class="product-image-section">
+                <img id="product-image" src="../images/woman bag 1.jpeg" alt="Product Image">
+            </div>
+            
+            <div class="product-info-section">
+                <h2 id="product-name">Women's Premium Bag</h2>
+                <div class="price-section">
+                    <span id="product-price" class="current-price">₦29,286</span>
+                    <span id="product-original-price" class="original-price">₦32,000</span>
+                </div>
+                
+                <div class="product-description">
+                    <h4>Description</h4>
+                    <p>High-quality premium bag perfect for everyday use. Made with durable materials and elegant design that complements any outfit.</p>
+                </div>
+
+                <div class="product-features">
+                    <h4>Features</h4>
+                    <ul>
+                        <li>Premium quality materials</li>
+                        <li>Multiple compartments</li>
+                        <li>Adjustable straps</li>
+                        <li>Water-resistant</li>
+                        <li>Available in multiple colors</li>
+                    </ul>
+                </div>
+
+                <div class="quantity-section">
+                    <label for="quantity">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button onclick="decreaseQuantity()">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="10">
+                        <button onclick="increaseQuantity()">+</button>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="add-to-cart-btn" onclick="addToCartFromDetail()">
+                        🛒 Add to Cart
+                    </button>
+                    <button class="buy-now-btn" onclick="buyNow()">
+                        Buy Now
+                    </button>
+                </div>
+
+                <div class="product-info">
+                    <p><strong>Stock:</strong> <span class="stock-info">Only 10 left!</span></p>
+                    <p><strong>Rating:</strong> <span class="stars">★★★★☆</span> (4.2/5)</p>
+                    <p><strong>Sold:</strong> 12K+ items</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../app.js"></script>
+    <script src="cart.js"></script>
+    <script>
+        function increaseQuantity() {
+            const quantityInput = document.getElementById('quantity');
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue < 10) {
+                quantityInput.value = currentValue + 1;
+            }
+        }
+
+        function decreaseQuantity() {
+            const quantityInput = document.getElementById('quantity');
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        }
+
+        function addToCartFromDetail() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const product = {
+                id: Date.now() + Math.random(),
+                image: document.getElementById('product-image').src,
+                name: document.getElementById('product-name').textContent,
+                price: document.getElementById('product-price').textContent,
+                originalPrice: document.getElementById('product-original-price').textContent,
+                quantity: quantity
+            };
+
+            // Add to cart multiple times based on quantity
+            for (let i = 0; i < quantity; i++) {
+                const existingItem = cart.items.find(item => 
+                    item.image === product.image && item.price === product.price
+                );
+
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.items.push({...product, quantity: 1});
+                }
+            }
+
+            cart.saveCart();
+            cart.updateCartCount();
+            cart.showAddedNotification(product.name);
+        }
+
+        function buyNow() {
+            addToCartFromDetail();
+            window.location.href = '../cart.html';
+        }
+    </script>
+</body>
+</html>

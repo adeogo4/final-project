@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order - Fav Speedy</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="payment.css">
+    <style>
+        .tracking-container {
+            max-width: 800px;
+            margin: 80px auto 0;
+            padding: 20px;
+        }
+        
+        .tracking-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .tracking-input {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .tracking-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .tracking-input button {
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .tracking-result {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .order-status {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        
+        .status-processing {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-shipped {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-delivered {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .tracking-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .tracking-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e9ecef;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #e9ecef;
+        }
+        
+        .timeline-item.completed::before {
+            background: #28a745;
+        }
+        
+        .timeline-item.current::before {
+            background: #007bff;
+        }
+        
+        .timeline-content h4 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        
+        .timeline-content p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .timeline-date {
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <header class="custom">
+        <div>
+            <img src="../images/Blue and White Flat Illustrative E-commerce Platform Logo.png" alt="logo">
+        </div>
+        <div class="nav-custom">
+            <div class="custom-nav-img">
+                <img class="close-custom" src="../images/icon-menu.svg" alt="">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html#Home">Home</a></li>
+                    <li><a href="../index.html#Men">Men</a></li>
+                    <li><a href="../index.html#women">Women</a></li>
+                    <li><a href="../cart.html">🛒 Cart</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="tracking-container">
+        <div class="tracking-form">
+            <h2>Track Your Order</h2>
+            <p>Enter your order number to track your package</p>
+            
+            <div class="tracking-input">
+                <input type="text" id="orderNumber" placeholder="Enter order number (e.g., FS123456)">
+                <button onclick="trackOrder()">Track Order</button>
+            </div>
+            
+            <p class="text-muted">
+                <small>You can find your order number in the confirmation email we sent you.</small>
+            </p>
+        </div>
+
+        <div id="trackingResult" class="tracking-result">
+            <div class="order-status">
+                <h3>Order <span id="displayOrderNumber"></span></h3>
+                <div id="statusBadge" class="status-badge status-processing">Processing</div>
+            </div>
+
+            <div class="order-info">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Order Details</h4>
+                        <p><strong>Order Date:</strong> <span id="orderDate"></span></p>
+                        <p><strong>Total Amount:</strong> <span id="orderTotal"></span></p>
+                        <p><strong>Payment Method:</strong> <span id="paymentMethod"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Shipping Address</h4>
+                        <div id="shippingAddress">
+                            <p>John Doe</p>
+                            <p>123 Main Street</p>
+                            <p>Lagos, Nigeria</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tracking-timeline">
+                <h4>Tracking Timeline</h4>
+                
+                <div class="timeline-item completed">
+                    <div class="timeline-content">
+                        <h4>Order Placed</h4>
+                        <p>Your order has been received and is being processed</p>
+                        <div class="timeline-date" id="placedDate"></div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item completed">
+                    <div class="timeline-content">
+                        <h4>Payment Confirmed</h4>
+                        <p>Payment has been successfully processed</p>
+                        <div class="timeline-date" id="paidDate"></div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item current">
+                    <div class="timeline-content">
+                        <h4>Processing</h4>
+                        <p>Your order is being prepared for shipment</p>
+                        <div class="timeline-date">In Progress</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Shipped</h4>
+                        <p>Your order has been shipped and is on its way</p>
+                        <div class="timeline-date">Pending</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Out for Delivery</h4>
+                        <p>Your order is out for delivery</p>
+                        <div class="timeline-date">Pending</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Delivered</h4>
+                        <p>Your order has been delivered successfully</p>
+                        <div class="timeline-date">Pending</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-support">
+                <h4>Need Help?</h4>
+                <p>If you have any questions about your order, please contact our customer support:</p>
+                <p>📞 Phone: +234 123 456 7890</p>
+                <p>📧 Email: support@favspeedy.com</p>
+                <p>💬 WhatsApp: +234 123 456 7890</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function trackOrder() {
+            const orderNumber = document.getElementById('orderNumber').value.trim();
+            
+            if (!orderNumber) {
+                alert('Please enter an order number');
+                return;
+            }
+            
+            if (!orderNumber.startsWith('FS')) {
+                alert('Invalid order number format. Order numbers start with "FS"');
+                return;
+            }
+            
+            // Show tracking result
+            document.getElementById('trackingResult').style.display = 'block';
+            document.getElementById('displayOrderNumber').textContent = orderNumber;
+            
+            // Set mock data
+            const now = new Date();
+            const orderDate = new Date(now.getTime() - (2 * 24 * 60 * 60 * 1000)); // 2 days ago
+            const paidDate = new Date(now.getTime() - (2 * 24 * 60 * 60 * 1000)); // 2 days ago
+            
+            document.getElementById('orderDate').textContent = orderDate.toLocaleDateString();
+            document.getElementById('orderTotal').textContent = '₦45,750';
+            document.getElementById('paymentMethod').textContent = 'Credit Card';
+            document.getElementById('placedDate').textContent = orderDate.toLocaleString();
+            document.getElementById('paidDate').textContent = paidDate.toLocaleString();
+            
+            // Scroll to result
+            document.getElementById('trackingResult').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Auto-fill order number from URL parameter
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderNumber = urlParams.get('order');
+            
+            if (orderNumber) {
+                document.getElementById('orderNumber').value = orderNumber;
+                trackOrder();
+            }
+        });
+    </script>
+</body>
+</html>

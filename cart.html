@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart - Fav Speedy</title>
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" href="./index.css">
+  <link rel="stylesheet" href="Add to cat/style.css">
+</head>
+
+<body>
+  <header class="custom">
+    <div>
+      <img src="./images/Blue and White Flat Illustrative E-commerce Platform Logo.png" alt="logo">
+    </div>
+    <div class="nav-custom">
+      <div class="custom-nav-img">
+        <img class="close-custom" src="./images/icon-menu.svg" alt="">
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html#Home">Home</a></li>
+          <li><a href="index.html#Men">Men</a></li>
+          <li><a href="index.html#women">Women</a></li>
+          <li><a href="index.html#Contact">Contact</a></li>
+          <li><a href="index.html#TESTIMONIAL">Testimonial</a></li>
+          <li><a href="cart.html" style="position: relative;">
+              🛒 Cart
+              <span class="cart-count" style="display: none;">0</span>
+            </a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="cart-container">
+    <div class="cart-header">
+      <h1>Your Shopping Cart</h1>
+      <p>Review your items and proceed to checkout</p>
+    </div>
+
+    <div class="cart-content">
+      <div class="cart-items-section">
+        <h3>Cart Items</h3>
+        <div id="cart-items">
+          <!-- Cart items will be rendered here -->
+        </div>
+      </div>
+
+      <div class="cart-summary">
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span id="cart-total">₦0</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping:</span>
+          <span>Free</span>
+        </div>
+        <div class="summary-row summary-total">
+          <span>Total:</span>
+          <span id="cart-final-total">₦0</span>
+        </div>
+
+        <button class="checkout-btn" onclick="checkout()">
+          Proceed to Checkout
+        </button>
+
+        <a href="index.html" class="continue-shopping">
+          Continue Shopping
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+  <script src="Add to cat/cart.js"></script>
+  <script>
+    function checkout() {
+      if (cart.items.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+
+      // Redirect to checkout page
+      window.location.href = 'payment method/checkout.html';
+    }
+
+    // Update final total when cart changes
+    function updateFinalTotal() {
+      const total = cart.getTotal();
+      const finalTotalElement = document.getElementById('cart-final-total');
+      if (finalTotalElement) {
+        finalTotalElement.textContent = `₦${total.toLocaleString()}`;
+      }
+    }
+
+    // Override the renderCart method to also update final total
+    const originalRenderCart = cart.renderCart.bind(cart);
+    cart.renderCart = function () {
+      originalRenderCart();
+      updateFinalTotal();
+    };
+
+    // Initial render
+    updateFinalTotal();
+  </script>
+</body>
+
+</html>

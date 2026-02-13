@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success - Fav Speedy</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="payment.css">
+</head>
+<body>
+    <header class="custom">
+        <div>
+            <img src="../images/Blue and White Flat Illustrative E-commerce Platform Logo.png" alt="logo">
+        </div>
+        <div class="nav-custom">
+            <div class="custom-nav-img">
+                <img class="close-custom" src="../images/icon-menu.svg" alt="">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html#Home">Home</a></li>
+                    <li><a href="../index.html#Men">Men</a></li>
+                    <li><a href="../index.html#women">Women</a></li>
+                    <li><a href="../cart.html">🛒 Cart</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="checkout-container">
+        <div class="success-message">
+            <div style="font-size: 64px; margin-bottom: 20px;">🎉</div>
+            <h1>Payment Successful!</h1>
+            <p>Thank you for your purchase. Your order has been confirmed and is being processed.</p>
+            
+            <div class="order-details">
+                <div class="order-number">
+                    Order Number: <span id="orderNumber">FS123456</span>
+                </div>
+                <div class="order-amount">
+                    Amount Paid: <span id="orderAmount">₦0</span>
+                </div>
+                <div class="order-date">
+                    Date: <span id="orderDate"></span>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h3>What's Next?</h3>
+                <ul>
+                    <li>📧 You'll receive a confirmation email shortly</li>
+                    <li>📦 Your order will be processed within 24 hours</li>
+                    <li>🚚 Delivery will take 2-5 business days</li>
+                    <li>📱 Track your order using the order number above</li>
+                </ul>
+            </div>
+
+            <div class="action-buttons">
+                <a href="../index.html" class="btn-next">Continue Shopping</a>
+                <a href="order-tracking.html" class="btn-back">Track Order</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set order details from URL parameters or localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderNumber = urlParams.get('order') || 'FS' + Date.now().toString().slice(-6);
+            const amount = urlParams.get('amount') || '0';
+            
+            document.getElementById('orderNumber').textContent = orderNumber;
+            document.getElementById('orderAmount').textContent = `₦${parseInt(amount).toLocaleString()}`;
+            document.getElementById('orderDate').textContent = new Date().toLocaleDateString();
+            
+            // Clear cart after successful payment
+            localStorage.removeItem('cartItems');
+            
+            // Mobile menu functionality
+            const icon_menu = document.querySelector(".close-custom");
+            const nav = document.querySelector(".nav-custom nav");
+
+            if (icon_menu && nav) {
+                icon_menu.addEventListener('click', () => {
+                    if (nav.style.display == 'block') {
+                        nav.style.display = "none";
+                        icon_menu.setAttribute("src", "../images/icon-menu.svg");
+                    } else {
+                        nav.style.display = "block";
+                        icon_menu.setAttribute("src", "../images/icon-close.svg");
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

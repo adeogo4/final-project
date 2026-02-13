@@ -1,0 +1,11 @@
+const products = [
+    {
+        "id": 1,
+        "productName": "Mens Shoe",
+        "price": 45000,
+    }, {
+        "id": 2,
+        "productName": "Mens Shoe",
+        "price": 45000,
+    },
+]
